@@ -1,0 +1,59 @@
+version: '3'
+
+networks:
+  my-net:
+    driver: bridge
+
+volumes:
+  kafka_data:
+  redis_data:
+
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+      - redis
+    networks:
+      - my-net
+
+  kafka:
+    image: bitnami/kafka:latest 
+    container_name: kafka
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper-server:2181
+    ports:
+      - "9092:9092"
+    depends_on: 
+      - zookeeper
+    volumes:
+      - kafka_data:/bitnami/kafka
+    networks:
+      - my-net
+  
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper-server 
+    environment: 
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+    networks:
+      - my-net
+     
+  redis:
+    image: bitnami/redis:latest
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/bitnami/redis/data
+    networks:
+      - my-net
+
