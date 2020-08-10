@@ -13,10 +13,10 @@ AWS-CLI and Terraform
 
 Change the AWS Account Id in main.tf and build.sh 
 
-$ cd demo-docker-compose-ecs/go-redis-kafka-demo-master/
-$ ./build.sh #build and push
-
 $ cd demo-docker-compose-ecs/terraform
 $ terraform init
 $ terraform plan 
 $ terraform apply
+
+$ cd demo-docker-compose-ecs/go-redis-kafka-demo-master/
+$ ./build.sh #build and push
